@@ -1,4 +1,4 @@
-const { fetchProducts } = require('./helpers/fetchProducts');
+// const { fetchProducts } = require('./helpers/fetchProducts');
 
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
@@ -27,13 +27,13 @@ const createProductItemElement = ({ sku, name, image }) => {
 };
 
 const adicionaProduto = async () => {
-const data = await fetchProducts('computador');
-const items = document.getElementsByClassName('items');
-const { results } = data;
-results.forEach((element) => {
-  const { id: sku, title: name, thumbnail: image } = element;
-  const product = createProductItemElement({ sku, name, image });
-  items.appendChild((product));
+  const data = await fetchProducts('computador');
+  const items = document.querySelector('.items');
+  const { results } = data;
+  results.forEach((element) => {
+    const { id: sku, title: name, thumbnail: image } = element;
+    const product = createProductItemElement({ sku, name, image });
+    items.appendChild((product));
  });
 };
 
