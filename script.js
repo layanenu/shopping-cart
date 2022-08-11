@@ -1,5 +1,4 @@
-// const { fetchItem } = require('./helpers/fetchItem');
-
+const CARTITEMS = '.cart__items';
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -42,6 +41,9 @@ const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').inn
 const cartItemClickListener = (event) => {
   // coloque seu código aqui
   event.target.remove();
+  const cartItems = document.querySelector(CARTITEMS);
+  const itensNoCarrinho = cartItems.innerHTML;
+  saveCartItems(itensNoCarrinho);
 };
 
 const createCartItemElement = ({ sku, name, salePrice }) => {
@@ -54,25 +56,61 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
 
 const adicionaItemAoCarrinho = async (id) => {
   const data = await fetchItem(id);
-  const cartItems = document.querySelector('.cart__items');
+  const cartItems = document.querySelector(CARTITEMS);
   const { id: sku, title: name, price: salePrice } = data;
   const product = createCartItemElement({ sku, name, salePrice });
   cartItems.appendChild((product));
+  const itensNoCarrinho = cartItems.innerHTML;
+  saveCartItems(itensNoCarrinho);
 };
+
+// const renderItems = () => {
+//   const itemsSalvos = document.querySelector('.cart__items');
+//   itemsSalvos.innerHTML = '';  
+//   const array = [];
+//   array.forEach((element) => {
+//     const produto = createCartItemElement(element);
+//     itemsSalvos.appendChild(produto);
+//   });
+// };
+
+const listCardItens = () => {
+  const listSaveCardItems = getSavedCartItems('cartItems');
+  const cartItems = document.querySelector(CARTITEMS);
+  cartItems.innerHTML = listSaveCardItems.trim();
+
+  const cartItem = document.querySelectorAll('.cart__item');
+  cartItem.forEach((element) => {
+    element.addEventListener('click', cartItemClickListener);
+  });
+};
+
+// const removeItens = () => {
+//   const cartItems = document.querySelector('.cart__items');
+//   // cartItems.filter(() => {
+
+//   // });
+// };
 
 const listenerItems = () => {
   const buttons = document.querySelectorAll('.item__add');
-  console.log(buttons);
+  // console.log(buttons);
   buttons.forEach((element) => {
     const parent = element.parentElement;
     const primeiroFilho = parent.firstChild;
+    // console.log(primeiroFilho);
     element.addEventListener('click', () => {
       adicionaItemAoCarrinho(primeiroFilho.innerText);
+      // além de adicionar ao carrinho quero adc ao local storage
+      // salvar os dados que já estao carregados
+      // os dados da lista ja estao salvos em algum lugar
     });
   });
 };
 
 window.onload = async () => {
   await adicionaProduto();
-  listenerItems(); 
+  listenerItems();
+  listCardItens();
+  // renderItems();
 };
