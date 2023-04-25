@@ -8,6 +8,7 @@ O projeto Shopping cart foi o desenvolvimento de um carrinho de compras através
   <summary><strong> Stacks </strong></summary><br />
 
   * JavaScript
+  * Jest
 
 </details>
 
